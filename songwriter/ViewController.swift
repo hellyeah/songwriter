@@ -12,7 +12,7 @@ import AVFoundation
 struct cellData {
     var opened = Bool()
     var title = String()
-    var sectionData = [String]()
+    var sectionData = [Int]()
 }
 
 class ViewController: UIViewController, AVAudioRecorderDelegate, UITableViewDelegate, UITableViewDataSource {
@@ -87,7 +87,16 @@ class ViewController: UIViewController, AVAudioRecorderDelegate, UITableViewDele
             audioRecorder = nil
             
             UserDefaults.standard.setValue(numberOfRecords, forKey: "myNumber")
-            myTableView.reloadData()
+            //myTableView.append(
+            if isKeyPresentInUserDefaults(key: "\(numberOfRecords-1)") {
+                let highlights = UserDefaults.standard.array(forKey: "\(numberOfRecords)") as! [Int]
+                
+                tableViewData.append(cellData(opened: false, title: "Memo \(numberOfRecords-1)", sectionData: highlights))
+                myTableView.reloadData()
+            } else {
+                tableViewData.append(cellData(opened: false, title: "Memo \(numberOfRecords-1)", sectionData: []))
+                myTableView.reloadData()
+            }
             
             buttonLabel.setTitle("Start Recording", for: .normal)
             
@@ -95,15 +104,24 @@ class ViewController: UIViewController, AVAudioRecorderDelegate, UITableViewDele
         
     }
     
+//
+//    func resetDefaults() {
+//        let defaults = UserDefaults.standard
+//        let dictionary = defaults.dictionaryRepresentation()
+//        dictionary.keys.forEach { key in
+//            defaults.removeObject(forKey: key)
+//        }
+//    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+//        resetDefaults()
         // Do any additional setup after loading the view, typically from a nib.
         
         //later on we'll for loop iterate through user defaults to fill this information in
-        tableViewData = [cellData(opened: false, title: "Title1", sectionData: ["cell1", "cell2", "cell3"]),
-                        cellData(opened: false, title: "Title2", sectionData: ["cell1", "cell2", "cell3"]),
-                        cellData(opened: false, title: "Title3", sectionData: ["cell1", "cell2", "cell3"]),
-                        cellData(opened: false, title: "Title4", sectionData: ["cell1", "cell2", "cell3"])]
+        tableViewData = []
+        
+        
     
         //Setting up Session
         recordingSession = AVAudioSession.sharedInstance()
@@ -111,7 +129,42 @@ class ViewController: UIViewController, AVAudioRecorderDelegate, UITableViewDele
         //do we have something in our user defaults. if so, then set the value of numberofrecords to current value in storage
         if let number:Int = UserDefaults.standard.object(forKey: "myNumber") as? Int {
             numberOfRecords = number
+            print("number of records:\(numberOfRecords)")
+            //let records = UserDefaults.standard.array(forKey: "\(numberOfRecords)") as! [Int]
+            
+            for i in 0..<numberOfRecords {
+                print(i)
+                if isKeyPresentInUserDefaults(key: "\(i)") {
+                    let highlights = UserDefaults.standard.array(forKey: "\(i)") as! [Int]
+                    print(highlights)
+                    if i < tableViewData.count {
+                        tableViewData[i] = cellData(opened: false, title: "Memo \(i)", sectionData: highlights)
+                    } else {
+                        tableViewData.append(cellData(opened: false, title: "Memo \(i)", sectionData: highlights))
+                    }
+
+                } else {
+                    if i < tableViewData.count {
+                        tableViewData[i] = cellData(opened: false, title: "Memo \(i)", sectionData: [])
+                    } else {
+                        tableViewData.append(cellData(opened: false, title: "Memo \(i)", sectionData: []))
+                    }
+                  
+                }
+
+                //tableViewData.append(cellData(opened: false, title: "Title1", sectionData: ["cell1", "cell2", "cell3"])
+            }
+//            for (int i = 0; i < numberOfRecords; i++) {
+//                for record in records {
+//                    tableViewData.append(record)
+//                }
+//            }
+
         }
+        
+        
+
+        
         
         AVAudioSession.sharedInstance().requestRecordPermission { (hasPermission) in
             if hasPermission {
@@ -122,6 +175,10 @@ class ViewController: UIViewController, AVAudioRecorderDelegate, UITableViewDele
             }
         }
     
+    }
+    
+    func secondsToHoursMinutesSeconds (seconds : Int) -> (Int, Int, Int) {
+        return (seconds / 3600, (seconds % 3600) / 60, (seconds % 3600) % 60)
     }
 
     //Function that gets path to directory (where we'll save audio recordings)
@@ -158,6 +215,7 @@ class ViewController: UIViewController, AVAudioRecorderDelegate, UITableViewDele
         }
     }
     
+
     
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -174,8 +232,9 @@ class ViewController: UIViewController, AVAudioRecorderDelegate, UITableViewDele
         }
         else {
             //use different cell identifier if needed
+            let (h,m,s) = secondsToHoursMinutesSeconds(seconds:tableViewData[indexPath.section].sectionData[dataIndex])
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "cell") else { return UITableViewCell()}
-            cell.textLabel?.text = tableViewData[indexPath.section].sectionData[dataIndex]
+            cell.textLabel?.text = "     Highlight at \(h):\(m):\(s)"
             return cell
         }
 
@@ -215,6 +274,41 @@ class ViewController: UIViewController, AVAudioRecorderDelegate, UITableViewDele
             
         }
         else {
+            let path = getDirectory().appendingPathComponent("\(indexPath.section + 1).m4a")
+            
+            do {
+                audioPlayer = try AVAudioPlayer(contentsOf: path)
+                audioPlayer.play()
+
+                
+                if isKeyPresentInUserDefaults(key: "\(indexPath.section+1)") {
+                    let highlights = UserDefaults.standard.array(forKey: "\(indexPath.section+1)") as! [Int]
+                    print(highlights)
+                    print("Index Path: \(indexPath)")
+                    let currentHighlight = highlights[indexPath.row-1]
+                    //**we'll set current time to the highlight time
+                    audioPlayer.currentTime = TimeInterval(currentHighlight)
+                }
+            }
+            catch {
+                
+            }
+//**THIS WILL BE WHAT HAPPENS WHEN YOU CLICK ON A HIGHLIGHT
+            
+            //            let path = getDirectory().appendingPathComponent("\(indexPath.row + 1).m4a")
+//
+//            do {
+//                audioPlayer = try AVAudioPlayer(contentsOf: path)
+//                audioPlayer.play()
+//
+//                if isKeyPresentInUserDefaults(key: "\(indexPath.row+1)") {
+//                    let highlights = UserDefaults.standard.array(forKey: "\(indexPath.row+1)") as! [Int]
+//                    print(highlights)
+//                }
+//            }
+//            catch {
+//
+//            }
             
         }
         
