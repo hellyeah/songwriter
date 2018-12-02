@@ -18,24 +18,71 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OyL-hm-U9S">
-                                <rect key="frame" x="163" y="318" width="49" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OyL-hm-U9S">
+                                <rect key="frame" x="112" y="104" width="150" height="30"/>
                                 <state key="normal" title="Record"/>
                                 <connections>
                                     <action selector="record:" destination="BYZ-38-t0r" eventType="touchUpInside" id="MCd-ue-Jjf"/>
                                 </connections>
                             </button>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="Mc3-AT-Okt">
+                                <rect key="frame" x="0.0" y="288" width="375" height="379"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="379" id="wt3-wU-QTJ"/>
+                                </constraints>
+                                <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="cell" id="Hmk-vO-xK3">
+                                        <rect key="frame" x="0.0" y="28" width="375" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Hmk-vO-xK3" id="BUW-Z2-lBs">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </prototypes>
+                                <connections>
+                                    <outlet property="dataSource" destination="BYZ-38-t0r" id="myR-QQ-Dzb"/>
+                                    <outlet property="delegate" destination="BYZ-38-t0r" id="CkW-eo-6X7"/>
+                                </connections>
+                            </tableView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rUO-16-zLD">
+                                <rect key="frame" x="156" y="174" width="62" height="30"/>
+                                <state key="normal" title="Highlight"/>
+                                <connections>
+                                    <action selector="highlight:" destination="BYZ-38-t0r" eventType="touchUpInside" id="vgy-rs-QmC"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="Mc3-AT-Okt" secondAttribute="bottom" id="2CI-Ko-JDQ"/>
+                            <constraint firstItem="OyL-hm-U9S" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="163" id="58h-z4-wCh"/>
+                            <constraint firstItem="Mc3-AT-Okt" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="7qy-Ls-8kD"/>
+                            <constraint firstItem="rUO-16-zLD" firstAttribute="top" secondItem="OyL-hm-U9S" secondAttribute="bottom" constant="40" id="BKo-co-z55"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="OyL-hm-U9S" secondAttribute="trailing" constant="113" id="Brn-zd-liQ"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="rUO-16-zLD" secondAttribute="trailing" constant="157" id="G6v-SM-GyB"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="OyL-hm-U9S" secondAttribute="trailing" constant="163" id="LTg-96-sSi"/>
+                            <constraint firstItem="OyL-hm-U9S" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="84" id="TT2-th-lzd"/>
+                            <constraint firstItem="Mc3-AT-Okt" firstAttribute="top" secondItem="rUO-16-zLD" secondAttribute="bottom" constant="84" id="Tgp-hw-INL"/>
+                            <constraint firstItem="Mc3-AT-Okt" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="YaP-2m-J8f"/>
+                            <constraint firstItem="rUO-16-zLD" firstAttribute="top" secondItem="OyL-hm-U9S" secondAttribute="bottom" constant="40" id="cju-Hd-X6q"/>
+                            <constraint firstItem="rUO-16-zLD" firstAttribute="top" secondItem="OyL-hm-U9S" secondAttribute="bottom" constant="40" id="obk-xJ-Il2"/>
+                            <constraint firstItem="OyL-hm-U9S" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="112" id="rem-on-XfS"/>
+                            <constraint firstItem="rUO-16-zLD" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="156" id="t8M-SX-dcB"/>
+                            <constraint firstItem="OyL-hm-U9S" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="84" id="y1g-Iy-ags"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <connections>
                         <outlet property="buttonLabel" destination="OyL-hm-U9S" id="2M1-G8-keo"/>
+                        <outlet property="highlightLabel" destination="rUO-16-zLD" id="Vz4-Y7-9JJ"/>
+                        <outlet property="myTableView" destination="Mc3-AT-Okt" id="GFH-sw-n4c"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
+            <point key="canvasLocation" x="53.600000000000001" y="27.436281859070466"/>
         </scene>
     </scenes>
 </document>
