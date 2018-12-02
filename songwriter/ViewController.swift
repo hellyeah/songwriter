@@ -287,7 +287,12 @@ class ViewController: UIViewController, AVAudioRecorderDelegate, UITableViewDele
                     print("Index Path: \(indexPath)")
                     let currentHighlight = highlights[indexPath.row-1]
                     //**we'll set current time to the highlight time
-                    audioPlayer.currentTime = TimeInterval(currentHighlight)
+                    if currentHighlight > 10 {
+                         audioPlayer.currentTime = TimeInterval(currentHighlight-10)
+                    } else {
+                        audioPlayer.currentTime = TimeInterval(currentHighlight)
+                    }
+                   
                 }
             }
             catch {
