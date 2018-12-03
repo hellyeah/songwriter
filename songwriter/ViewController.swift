@@ -61,6 +61,9 @@ class ViewController: UIViewController, AVAudioRecorderDelegate, UITableViewDele
         print("pressed record")
         //Check if we have an active recorder
         if audioRecorder == nil {
+            if let image = UIImage(named: "recordingbutton") {
+                buttonLabel.setImage(image, for: .normal)
+            }
             numberOfRecords += 1
             UserDefaults.standard.set([Int](), forKey: "\(numberOfRecords)")
             let filename = getDirectory().appendingPathComponent("\(numberOfRecords).m4a")
@@ -81,6 +84,9 @@ class ViewController: UIViewController, AVAudioRecorderDelegate, UITableViewDele
         }
             //case where in this moment we're already recording
         else {
+            if let image = UIImage(named: "recordbutton") {
+                buttonLabel.setImage(image, for: .normal)
+            }
             //Stopping audio recording
             print("stopped recording")
             audioRecorder.stop()
@@ -115,7 +121,7 @@ class ViewController: UIViewController, AVAudioRecorderDelegate, UITableViewDele
     
     override func viewDidLoad() {
         super.viewDidLoad()
-//        resetDefaults()
+        //resetDefaults()
         // Do any additional setup after loading the view, typically from a nib.
         
         //later on we'll for loop iterate through user defaults to fill this information in
@@ -288,7 +294,8 @@ class ViewController: UIViewController, AVAudioRecorderDelegate, UITableViewDele
                     let currentHighlight = highlights[indexPath.row-1]
                     //**we'll set current time to the highlight time
                     if currentHighlight > 10 {
-                         audioPlayer.currentTime = TimeInterval(currentHighlight-10)
+                         //audioPlayer.currentTime = TimeInterval(currentHighlight-10)
+                         audioPlayer.currentTime = TimeInterval(currentHighlight)
                     } else {
                         audioPlayer.currentTime = TimeInterval(currentHighlight)
                     }
